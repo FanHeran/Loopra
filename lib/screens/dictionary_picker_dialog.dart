@@ -36,12 +36,19 @@ class DictionaryPickerDialog extends StatefulWidget {
 class _DictionaryPickerDialogState extends State<DictionaryPickerDialog> {
   late final List<_LanguageOption> _languages;
   late String _activeLanguage;
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
     _languages = _buildLanguageOptions(widget.dictionaries);
     _activeLanguage = _resolveInitialLanguage();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -105,7 +112,9 @@ class _DictionaryPickerDialogState extends State<DictionaryPickerDialog> {
                   ? const _EmptyPlaceholder()
                   : Scrollbar(
                       thumbVisibility: true,
+                      controller: _scrollController,
                       child: ListView.builder(
+                        controller: _scrollController,
                         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
                         itemCount: filtered.length,
                         itemBuilder: (BuildContext context, int index) {
